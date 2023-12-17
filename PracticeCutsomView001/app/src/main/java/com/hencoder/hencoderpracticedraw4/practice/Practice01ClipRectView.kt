@@ -23,6 +23,44 @@ class Practice01ClipRectView : View {
         defStyleAttr
     )
 
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        val specModeWidth = MeasureSpec.getMode(widthMeasureSpec)
+        val specSizeWidth = MeasureSpec.getSize(widthMeasureSpec)
+        //
+        val w = when (specModeWidth) {
+            MeasureSpec.UNSPECIFIED -> suggestedMinimumWidth
+            MeasureSpec.AT_MOST -> specSizeWidth // TODO AT_MOST
+            MeasureSpec.EXACTLY -> specSizeWidth
+            else -> 0
+        }
+
+        val specModeHeight = MeasureSpec.getMode(heightMeasureSpec)
+        val specSizeHeight = MeasureSpec.getSize(heightMeasureSpec)
+        //
+        val h = when (specModeHeight) {
+            MeasureSpec.UNSPECIFIED -> suggestedMinimumWidth
+            MeasureSpec.AT_MOST -> specSizeHeight // TODO AT_MOST
+            MeasureSpec.EXACTLY -> specSizeHeight
+            else -> 0
+        }
+
+        setMeasuredDimension(w, h)
+    }
+
+    fun getDefaultSize(size: Int, measureSpec: Int): Int {
+        var result = size
+        val specMode = MeasureSpec.getMode(measureSpec)
+        val specSize = MeasureSpec.getSize(measureSpec)
+        when (specMode) {
+            MeasureSpec.UNSPECIFIED -> result = size
+            MeasureSpec.AT_MOST -> result = specSize
+            MeasureSpec.EXACTLY -> result = specSize
+        }
+        return result
+    }
+
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val left = (width - bitmap.width) / 2
