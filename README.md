@@ -3,6 +3,10 @@ Android自定义View工程
 
 
 
+[玩Android ~~ Android自定义View - 学习路径](https://www.wanandroid.com/route/show/573)
+
+
+
 
 
 
@@ -11,7 +15,19 @@ Android自定义View工程
 
 ### 文章1：
 
-关于View绘制相关对象的流程：https://www.cnblogs.com/huansky/p/11911549.html ， 【**文章的流程相关问题很重要**】
+关于View绘制相关对象的流程：https://www.cnblogs.com/huansky/p/11911549.html ， 【**文章的流程相关问题很重要**】 
+
+同系列文章：
+
+- ### [Android View 绘制流程之 DecorView 与 ViewRootImpl](https://www.cnblogs.com/huansky/p/11911549.html)
+
+- ### [Android View 的绘制流程之 Measure 过程详解 (一)](https://www.cnblogs.com/huansky/p/11920454.html)
+
+- ### [Android View 的绘制流程之 Layout 和 Draw 过程详解 (二)](https://www.cnblogs.com/huansky/p/12000771.html)
+
+- ### [Android View 的事件分发原理解析](https://www.cnblogs.com/huansky/p/9656394.html)
+
+- ### [Android 自定义 View 详解](https://www.cnblogs.com/huansky/p/11808234.html)
 
 Activity持有Window（PhoneWindow）对象，Windows获取WindowManager实现为WindowManagerImpl，添加View，最终通过WindowManagerGlobal（间接构建ViewRootImpl）添加DecorView，因此 PhoneWindow和DecorView之间是通过ViewRootImpl构建的控制桥梁；
 
