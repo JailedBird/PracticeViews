@@ -10,7 +10,9 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
 import cn.jailedbird.template.R
+import cn.jailedbird.template.utils.log
 import kotlin.math.min
+import kotlin.random.Random
 
 
 /**
@@ -25,6 +27,7 @@ class CustomView @JvmOverloads constructor(
 
     private var mTitleText: String = ""
     private var mTitleTextColor = 0
+    private var mBackgroundColor = 0
     private var mTitleTextSize = 0
 
     private var mPaint = Paint()
@@ -48,6 +51,10 @@ class CustomView @JvmOverloads constructor(
                         mTitleTextColor = a.getColor(attr, Color.BLACK)
                     }
 
+                    R.styleable.CustomTitleView_backgroundColor -> {
+                        mBackgroundColor = a.getColor(attr, Color.TRANSPARENT)
+                    }
+
                     // 默认设置为16sp，TypeValue也可以把sp转化为px
                     R.styleable.CustomTitleView_titleTextSize -> {
                         mTitleTextSize = a.getDimensionPixelSize(
@@ -64,6 +71,19 @@ class CustomView @JvmOverloads constructor(
         mPaint.color = mTitleTextColor
         /** 重要 获取 文字对应的矩形框*/
         mPaint.getTextBounds(mTitleText, 0, mTitleText.length, mBound)
+
+        setOnClickListener {
+            mTitleText = randomText()
+            "onClick: mTitleText is $mTitleText".log()
+            requestLayout()
+            // requestLayout() 刷新布局 当查高度变化时候 对应的居中也会支持 onMeasure ~ onDraw invalidate只会冲走onDraw
+            /**
+             * [android.widget.TextView#setText] 会调用 [android.widget.TextView#checkForRelayout] 是否进行invalidate和requestLayout
+             * */
+            // invalidate() // 必须要刷新 才会重新走onDraw流程 如果字符长度变化 不会走onMeasure 字体不会居中 尺寸不会重新测量
+
+            // postInvalidate() //
+        }
 
     }
 
@@ -123,6 +143,7 @@ class CustomView @JvmOverloads constructor(
 
         }
 
+        "onMeasure: (measureWidth, measureHeight) is $measureWidth $measureHeight".log()
         setMeasuredDimension(measureWidth, measureHeight)
 
 
@@ -130,7 +151,7 @@ class CustomView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        mPaint.color = Color.YELLOW
+        mPaint.color = mBackgroundColor
         canvas.drawRect(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), mPaint)
         mPaint.color = mTitleTextColor
         canvas.drawText(
@@ -139,7 +160,17 @@ class CustomView @JvmOverloads constructor(
             (height / 2 + mBound.height() / 2).toFloat(),
             mPaint
         )
+        "onDraw".log()
 
+    }
+
+    private fun randomText(): String {
+        val charPool: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+        val randomLength = Random.nextInt(2, 21) // 生成长度在 2 到 20 之间的随机数
+
+        return (1..randomLength)
+            .map { charPool.random() }
+            .joinToString("")
     }
 
 

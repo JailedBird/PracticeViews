@@ -18,6 +18,7 @@
         custom:layout_constraintStart_toStartOf="parent"
         custom:layout_constraintTop_toTopOf="parent"
         custom:titleText="3712"
+        custom:backgroundColor="#00ff00"
         custom:titleTextColor="#ff0000"
         custom:titleTextSize="40sp" />
 
