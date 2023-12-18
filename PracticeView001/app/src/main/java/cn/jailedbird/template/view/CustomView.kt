@@ -9,7 +9,8 @@ import android.graphics.Rect
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
-import cn.jailedbird.practiceviewtemplate.R
+import cn.jailedbird.template.R
+import kotlin.math.min
 
 
 /**
@@ -40,7 +41,7 @@ class CustomView @JvmOverloads constructor(
             for (i in 0 until count) {
                 when (val attr = a.getIndex(i)) {
                     R.styleable.CustomTitleView_titleText -> {
-                        mTitleText = a.getString(attr)
+                        mTitleText = a.getString(attr) ?: ""
                     }
 
                     R.styleable.CustomTitleView_titleTextColor -> {
@@ -68,7 +69,11 @@ class CustomView @JvmOverloads constructor(
 
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        // super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
+        mPaint.textSize = mTitleTextSize.toFloat()
+        mPaint.getTextBounds(mTitleText, 0, mTitleText.length, mBound)
+
         val widthSpecMode = MeasureSpec.getMode(widthMeasureSpec)
         val widthSpecSize = MeasureSpec.getSize(widthMeasureSpec)
 
@@ -78,29 +83,63 @@ class CustomView @JvmOverloads constructor(
             }
 
             MeasureSpec.AT_MOST -> {
-                //
-                1
+                val textWidth: Float = mBound.width().toFloat()
+                val desired = (paddingLeft + textWidth + paddingRight).toInt()
+                min(desired, widthSpecSize)
+
             }
 
             MeasureSpec.UNSPECIFIED -> {
                 //
-                1
+                getDefaultSize(suggestedMinimumWidth, widthMeasureSpec)
             }
 
             else -> {
-                0 // error("Not happened")
+                error("Not happened")
             }
 
         }
 
-
         val heightSpecMode = MeasureSpec.getMode(heightMeasureSpec)
         val heightSpecSize = MeasureSpec.getSize(heightMeasureSpec)
+        val measureHeight = when (heightSpecMode) {
+            MeasureSpec.EXACTLY -> {
+                heightSpecSize
+            }
+
+            MeasureSpec.AT_MOST -> {
+                val textHeight: Float = mBound.height().toFloat()
+                val desired = (paddingTop + textHeight + paddingBottom).toInt()
+                min(desired, heightSpecSize)
+            }
+
+            MeasureSpec.UNSPECIFIED -> {
+                getDefaultSize(suggestedMinimumHeight, heightMeasureSpec)
+            }
+
+            else -> {
+                error("Not happened")
+            }
+
+        }
+
+        setMeasuredDimension(measureWidth, measureHeight)
+
 
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        mPaint.color = Color.YELLOW
+        canvas.drawRect(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), mPaint)
+        mPaint.color = mTitleTextColor
+        canvas.drawText(
+            mTitleText,
+            (width / 2 - mBound.width() / 2).toFloat(),
+            (height / 2 + mBound.height() / 2).toFloat(),
+            mPaint
+        )
+
     }
 
 
