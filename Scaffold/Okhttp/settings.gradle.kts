@@ -30,7 +30,7 @@ apply(from = "$rootDir/gradle/expose/expose.gradle.kts")
 val includeWithExpose: (projectPaths: String) -> Unit by extra
 val includeWithJavaExpose: (projectPaths: String) -> Unit by extra
 
-rootProject.name = "OkHttp"
+rootProject.name = "OkHttpSample"
 include(":app")
 include(":core:settings")
 include(":core:resource")

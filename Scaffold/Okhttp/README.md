@@ -1,5 +1,12 @@
 # Okhttp & Retrofit & Network
+## Handler 
 
+- 一文搞定面试 | Handler源码解析 https://juejin.cn/post/7220778786126577720
+围绕Handler Looper Message MessageQueue 展开
+- Handler同步屏障 https://juejin.cn/post/6971981915934949390
+讲述 垂直同步时候 插入同步屏障 优先执行异步消息 
+普通消息 存在target对象=自己的handler 异步字段false 同步屏障不存在handler 因为不需要回调 需要调用API插入 另外需要根据token删除 View绘制的
+会插入异步消息 runnable执行前立即通过token取消同步屏障 避免同步消息也无法执行
 ## Okhttp
 
 ### 拦截器和整体流程
